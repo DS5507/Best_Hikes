@@ -41,6 +41,20 @@ hike_url = f"https://www.hikingproject.com/data/get-trails?lat={lat}&lon={lon}&m
 response_hike = requests.get(hike_url)
 parsed_response_hike = json.loads(response_hike.text)
 hike_name = (parsed_response_hike)['trails'][0]['name']
-print(f"We found a great hike for you named '{hike_name}''")
+hike_summary = (parsed_response_hike)['trails'][0]['name']
+hike_length = (parsed_response_hike)['trails'][0]['length']
+hike_rating = (parsed_response_hike)['trails'][0]['stars']
+hike_difficulty_raw = (parsed_response_hike)['trails'][0]['difficulty']
+hike_location = (parsed_response_hike)['trails'][0]['location']
 
-breakpoint()
+if hike_difficulty_raw == "green":
+    hike_difficulty = "Easy"
+elif hike_difficulty_raw == "Black":
+    hike_difficulty = "Difficult"
+else:
+    hike_difficulty = "Moderate"
+print("--------------------")
+print(f"We found a great hike for you! The highest rated route within {distance} miles is named '{hike_name}'.")
+print(f"The route is {hike_length} miles long and is located in {hike_location}.")
+print(f"The community has given this trail {hike_rating} out of 5 stars and labeled its diffulty as {hike_difficulty}.")
+print(f"Here's a summary of the trail: {hike_summary}.")
