@@ -41,6 +41,14 @@ while True:
         print("Great, we found your starting point!")  
         break
 
+how_hard = input("On a scale of 1-5, what difficulty level are you interested in? ").lower()
+while how_hard not in str([1, 2, 3, 4, 5]):
+    print("Can you pick something between 1 - 5?")
+    print("--------------------")
+    break
+else:
+    print(f"Okay, I'll look for something rated a '{how_hard}'")
+
 distance = input("Just how many miles would you be willing to travel to find the best route? ").lower()
 if float(distance) >= 201:
     print("Sorry, I can only look 200 miles in any direction.  I'll go ahead and look 200 miles out for you though!")
@@ -48,7 +56,11 @@ if float(distance) >= 201:
 else:
     pass
 
+
+
 print("Okay, just a sec while we find something awesome for you.")
+print("--------------------")
+
 
 matched_address = parsed_response_address['result']['addressMatches'][0]['matchedAddress']
 coordinates = parsed_response_address['result']['addressMatches'][0]['coordinates']
@@ -56,7 +68,7 @@ lat = parsed_response_address['result']['addressMatches'][0]['coordinates']['y']
 lon = parsed_response_address['result']['addressMatches'][0]['coordinates']['x']
 
 ## Lat/Lon to Route
-hike_url = f"https://www.hikingproject.com/data/get-trails?lat={lat}&lon={lon}&minStars=3&sort=quality&maxDistance={distance}&maxResults=5&key={hike_key}"
+hike_url = f"https://www.hikingproject.com/data/get-trails?lat={lat}&lon={lon}&minStars=3&sort=quality&maxDistance={distance}&maxResults=500&key={hike_key}"
 response_hike = requests.get(hike_url)
 parsed_response_hike = json.loads(response_hike.text)
 hike_list = (parsed_response_hike)['trails']
@@ -80,13 +92,6 @@ elif hike_difficulty_raw == "blueBlack":
     hike_difficulty = "Moderately Hard"
 else:
     hike_difficulty = "Hard"
-
-print("--------------------")
-print(f"We found a great hike for you! The highest rated route within {distance} miles is named '{hike_name}'.")
-print(f"The route is {hike_length} miles long and is located in {hike_location}.")
-print(f"The community has given this trail {hike_rating} out of 5 stars and labeled its diffulty as {hike_difficulty}.")
-print(f"Here's a summary of the trail: {hike_summary}")
-print(f"You can check out more about this hike at {hike_url_response}.")
 
 green_list = []
 greenBlue_list=[]
@@ -112,6 +117,7 @@ greenBlue_trails=[]
 blue_trails = []
 blueBlack_trails = []
 black_trails = []
+selected_trails = []
 
 for x in hike_list:
     if str(x["id"]) in str(green_list):
@@ -125,6 +131,36 @@ for x in hike_list:
     else:
         black_list.append(x)
 
+
+if how_hard == str(1):
+    selected_trails = green_trails
+elif how_hard == str(2):
+    selected_trails = greenBlue_trails
+elif how_hard == str(3):
+    selected_trails = blue_trails
+elif how_hard == str(4):
+    selected_trails = blueBlack_trails
+elif how_hard == str(5):
+    selected_trails = black_trails
+else:
+    pass
+
+
+selected_hike_name = selected_trails[0]['name']
+selected_hike_summary = selected_trails[0]['summary']
+selected_hike_length = selected_trails[0]['length']
+selected_hike_rating = selected_trails[0]['stars']
+selected_hike_difficulty_raw = selected_trails[0]['difficulty']
+selected_hike_location = selected_trails[0]['location']
+selected_hike_url_response = selected_trails[0]['url']
+selected_hike_id = selected_trails[0]["id"]
+selected_hike_difficulty = selected_trails[0]["difficulty"]
+
+print(f"We found a great hike for you! The highest rated '{how_hard}' difficutly route within {distance} miles is named '{selected_hike_name}'.")
+print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
+print(f"The community has given this trail {selected_hike_rating} out of 5 stars and labeled its diffulty as {selected_hike_difficulty}.")
+print(f"Here's a summary of the trail: {selected_hike_summary}")
+print(f"You can check out more about this hike at {selected_hike_url_response}.")
 
 
 
