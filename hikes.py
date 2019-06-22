@@ -129,7 +129,7 @@ for x in hike_list:
     elif str(x["id"]) in str(blueBlack_list):
         blueBlack_trails.append(x)
     else:
-        black_list.append(x)
+        black_trails.append(x)
 
 
 if how_hard == str(1):
@@ -156,9 +156,13 @@ selected_hike_url_response = selected_trails[0]['url']
 selected_hike_id = selected_trails[0]["id"]
 selected_hike_difficulty = selected_trails[0]["difficulty"]
 
+
+
+print(f"There's {len(selected_trails)} trails that meet your criteria!")
+print("--------------------")
 print(f"We found a great hike for you! The highest rated '{how_hard}' difficutly route within {distance} miles is named '{selected_hike_name}'.")
 print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
-print(f"The community has given this trail {selected_hike_rating} out of 5 stars and labeled its diffulty as {selected_hike_difficulty}.")
+print(f"The community has given this trail {selected_hike_rating} out of 5 stars.")
 print(f"Here's a summary of the trail: {selected_hike_summary}")
 print(f"You can check out more about this hike at {selected_hike_url_response}.")
 
