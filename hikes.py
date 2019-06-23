@@ -11,8 +11,11 @@ import datetime
 
 load_dotenv()
 
+printtime = '{0:%Y-%m-%d-%H-%M-%S-%f}'.format(datetime.datetime.now())
 hike_key = os.environ.get("hike_key")
 
+print("")
+print("")
 print("Hey, I'm stoked that you want to go hiking.  Let's find you the best route!")
 print("--------------------")
 
@@ -160,6 +163,7 @@ while True:
 
 
     if selected_trails != []:
+        t = 0
         selected_hike_name = selected_trails[0]['name']
         selected_hike_summary = selected_trails[0]['summary']
         selected_hike_length = selected_trails[0]['length']
@@ -174,11 +178,28 @@ while True:
         print(f"There's {len(selected_trails)} trails that meet your criteria!")
         print("--------------------")
         print("")
-        print(f"We found a great hike for you! The highest rated '{how_hard}' difficutly route within {distance} miles is named '{selected_hike_name}'.")
+        print(f"We found a great hike for you! The highest rated route that's a {how_hard} out of 5 difficutly and within {distance} miles is named '{selected_hike_name}'.")
         print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
         print(f"The community has given this trail {selected_hike_rating} out of 5 stars.")
         print(f"Here's a summary of the trail: {selected_hike_summary}")
         print(f"You can check out more about this hike at {selected_hike_url_response}.")
+        
+        
+        csv_file_path = os.path.join(os.path.dirname(__file__), "saved_hikes", f"Difficulty_{how_hard}_Within_{distance}_Miles")
+
+        csv_headers = ["Hike Name", "Rating", "Reference URL"]
+
+        with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
+            writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+            writer.writeheader() # uses fieldnames set above
+            for x in selected_trails:
+                writer.writerow({
+                    "Hike Name": (x['name']),
+                    "Rating": (x['stars']),
+                    "Reference URL": (x['url']),
+        })
+        print("")
+        print(f"BTW, I went ahead and saved all of the hikes that met your criteria to a csv.  You can find it at {csv_file_path}")
         break
     else:
         print("")
