@@ -3,9 +3,11 @@
 import csv
 import json
 import os
+import webbrowser
 
 
 from dotenv import load_dotenv
+from urllib.request import urlopen
 import requests
 import datetime
 
@@ -48,8 +50,7 @@ while True:
 
 while True:
     
-    how_hard = input("On a scale of 1-5, what difficulty level are you interested in? ").lower()
-
+    how_hard = input("On a scale of 1-5, a '1' would be something like a stroll in the park and a '5' is probably better left to more experienced hikers and backpackers. What difficulty level are you interested in? : ").lower()
     while how_hard not in str([1, 2, 3, 4, 5]):
         print("Can you pick something between 1 - 5?")
         print("--------------------")
@@ -81,7 +82,6 @@ while True:
     
 
     while (parsed_response_hike)['success'] == int(1):
-        pass
         break
     else:
         print("Welp, we hit a snag. I couldn't get a valid response back from the Hiking Project.  Let's try again.")      
@@ -96,18 +96,6 @@ while True:
     hike_location = (parsed_response_hike)['trails'][0]['location']
     hike_url_response = (parsed_response_hike)['trails'][0]['url']
     hike_id = (parsed_response_hike)['trails'][0]["id"]
-
-
-    if hike_difficulty_raw == "green":
-        hike_difficulty = "Easy"
-    elif hike_difficulty_raw == "greenBlue":
-        hike_difficulty = "Moderately Easy"    
-    elif hike_difficulty_raw == "blue":
-        hike_difficulty = "Moderate"
-    elif hike_difficulty_raw == "blueBlack":
-        hike_difficulty = "Moderately Hard"
-    else:
-        hike_difficulty = "Hard"
 
     green_list = []
     greenBlue_list=[]
@@ -176,6 +164,7 @@ while True:
 
 
         print(f"There's {len(selected_trails)} trails that meet your criteria!")
+        print("")
         print("--------------------")
         print("")
         print(f"We found a great hike for you! The highest rated route that's a {how_hard} out of 5 difficutly and within {distance} miles is named '{selected_hike_name}'.")
@@ -199,8 +188,21 @@ while True:
                     "Reference URL": (x['url']),
         })
         print("")
-        print(f"BTW, I went ahead and saved all of the hikes that met your criteria to a csv.  You can find it at {csv_file_path}")
-        break
+        print(f"BTW, I went ahead and saved all of the hikes that met your criteria to a .csv file.")  
+        print(f"You can find it at {csv_file_path}.csv")
+        print("")
+
+        while True:
+            view_web = input(f"Do you want to view more about the hike that I selected for you on the Hiking Project?: ").lower()
+            while view_web not in ['yes', 'no']:
+                print("Sorry, but that was just a 'yes' or 'no' question.")
+                break
+            else:
+                if view_web == "yes":
+                    webbrowser.open_new(selected_hike_url_response)
+                    exit()
+                else:
+                    exit()
     else:
         print("")
         print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
