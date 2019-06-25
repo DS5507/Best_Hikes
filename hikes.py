@@ -50,11 +50,11 @@ while True:
 
 while True:
     
-    how_hard = input("On a scale of 1-5, a '1' would be something like a stroll in the park and a '5' is probably better left to more experienced hikers and backpackers. What difficulty level are you interested in? : ").lower()
+    how_hard = input("On a scale of 1-5, a '1' would be something like a stroll in the park and a '5' is probably better left to more experienced hikers and backpackers. What difficulty level are you interested in?: ").lower()
     while how_hard not in str([1, 2, 3, 4, 5]):
         print("Can you pick something between 1 - 5?")
         print("--------------------")
-        how_hard = input("On a scale of 1-5, what difficulty level are you interested in? ").lower()
+        how_hard = input("On a scale of 1-5, what difficulty level are you interested in?:  ").lower()
     else:
         print(f"Okay, I'll look for something with a difficulty rating of {how_hard} out of 5")
         print("")
@@ -150,61 +150,84 @@ while True:
         pass
 
 
-    if selected_trails != []:
-        t = 0
-        selected_hike_name = selected_trails[0]['name']
-        selected_hike_summary = selected_trails[0]['summary']
-        selected_hike_length = selected_trails[0]['length']
-        selected_hike_rating = selected_trails[0]['stars']
-        selected_hike_difficulty_raw = selected_trails[0]['difficulty']
-        selected_hike_location = selected_trails[0]['location']
-        selected_hike_url_response = selected_trails[0]['url']
-        selected_hike_id = selected_trails[0]["id"]
-        selected_hike_difficulty = selected_trails[0]["difficulty"]
-
-
+    while selected_trails != []:
         print(f"There's {len(selected_trails)} trails that meet your criteria!")
         print("")
         print("--------------------")
-        print("")
-        print(f"We found a great hike for you! The highest rated route that's a {how_hard} out of 5 difficutly and within {distance} miles is named '{selected_hike_name}'.")
-        print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
-        print(f"The community has given this trail {selected_hike_rating} out of 5 stars.")
-        print(f"Here's a summary of the trail: {selected_hike_summary}")
-        print(f"You can check out more about this hike at {selected_hike_url_response}.")
-        
-        
-        csv_file_path = os.path.join(os.path.dirname(__file__), "saved_hikes", f"Difficulty_{how_hard}_Within_{distance}_Miles")
-
-        csv_headers = ["Hike Name", "Rating", "Reference URL"]
-
-        with open(csv_file_path, "w") as csv_file: # "w" means "open the file for writing"
-            writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
-            writer.writeheader() # uses fieldnames set above
-            for x in selected_trails:
-                writer.writerow({
-                    "Hike Name": (x['name']),
-                    "Rating": (x['stars']),
-                    "Reference URL": (x['url']),
-        })
-        print("")
-        print(f"BTW, I went ahead and saved all of the hikes that met your criteria to a .csv file.")  
-        print(f"You can find it at {csv_file_path}.csv")
-        print("")
-
+        t = 0
         while True:
-            view_web = input(f"Do you want to view more about the hike that I selected for you on the Hiking Project?: ").lower()
-            while view_web not in ['yes', 'no']:
-                print("Sorry, but that was just a 'yes' or 'no' question.")
-                break
-            else:
-                if view_web == "yes":
-                    webbrowser.open_new(selected_hike_url_response)
-                    exit()
-                else:
-                    exit()
+            selected_hike_name = selected_trails[t]['name']
+            selected_hike_summary = selected_trails[t]['summary']
+            selected_hike_length = selected_trails[t]['length']
+            selected_hike_rating = selected_trails[t]['stars']
+            selected_hike_difficulty_raw = selected_trails[t]['difficulty']
+            selected_hike_location = selected_trails[t]['location']
+            selected_hike_url_response = selected_trails[t]['url']
+            selected_hike_id = selected_trails[t]["id"]
+            selected_hike_difficulty = selected_trails[t]["difficulty"]
+
+            print("")
+            print(f"We found a great hike for you! You should check out: '{selected_hike_name}'.")
+            print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
+            print(f"The community has given this trail {selected_hike_rating} out of 5 stars.")
+            print("")
+            print(f"Here's a summary of the trail: {selected_hike_summary}")
+            print("")
+           
+            while True:
+                morenew = input(f"Select 'More' for additional options or 'Next' to see the next hike that met your criteria.: ").lower()
+                if morenew not in ["more", "next"]:
+                    print("Please choose 'More' or 'Next'.")
+                    print("")
+                else:    
+                    if morenew == "next":
+                        print("-------------------")
+                        if t <= len(selected_trails):
+                            t = t+1
+                            break
+                        else:
+                            t = 0
+                            print("FYI, you cycled through your whole list.  I'll start at the beginning again.")
+                            break
+                    elif morenew == "more":
+                        print("")
+                        print("")
+                        print("Awesome, I'm really excited that you found a hike you like!  I've got a couple of options you can choose from now:")
+                        print("Web - View more about the hike you selected on the Hiking Project Website")
+                        print("Email - Send an Email with info about your selected hike")
+                        print("CSV - Save a list of all of the hikes that met your criteria to a CSV file to your local drive")
+                        print("Exit - Wrap it up and hit the trail!")
+                        
+                        while True:
+                            final_choice = input("So go ahead and please choose: 'Web,' 'Email,' 'CSV,' 'Exit': ").lower()
+                            if final_choice not in ["web", "email", "csv", "exit"]:
+                                print("Please choose: 'Web,' 'Email,' 'CSV,' 'Exit'") 
+                            elif final_choice == "web":
+                                webbrowser.open_new(selected_hike_url_response)
+                                print("Cool, check your browser!")
+                            elif final_choice == "email":
+                                print("Make an email...............")
+                            elif final_choice == "csv":
+                                csv_file_path = os.path.join(os.path.dirname(__file__), "saved_hikes", f"Difficulty_{how_hard}_Within_{distance}_Miles")
+
+                                csv_headers = ["Hike Name", "Rating", "Reference URL"]
+
+                                with open(csv_file_path, "w") as csv_file:
+                                    writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+                                    writer.writeheader() 
+                                    for x in selected_trails:
+                                        writer.writerow({
+                                            "Hike Name": (x['name']),
+                                            "Rating": (x['stars']),
+                                            "Reference URL": (x['url']),
+                                })
+                                print("")
+                                print(f"I've saved your list to a .csv file and you can find it at {csv_file_path}.csv")
+                                print("")
+    
     else:
         print("")
         print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
         print("")
+        break
 
