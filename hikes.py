@@ -13,7 +13,6 @@ import datetime
 
 load_dotenv()
 
-printtime = '{0:%Y-%m-%d-%H-%M-%S-%f}'.format(datetime.datetime.now())
 hike_key = os.environ.get("hike_key")
 
 print("")
@@ -22,8 +21,6 @@ print("Hey, I'm stoked that you want to go hiking.  Let's find you the best rout
 print("--------------------")
 
 while True:
-    ## User Input
-
     print("We'll need your basecamp location to find your best route.")
     street_raw = input("What's your street address? (Ex: 123 Main St): ").lower()
     street = street_raw.replace(" ", "+")
@@ -31,9 +28,6 @@ while True:
     print("Let me check my map and compass and see if I can find you...")
     print("--------------------")
 
-    # TODO: Add Additional Options
-
-    ## Address to Lat/Lon
     address_url = f"https://geocoding.geo.census.gov/geocoder/locations/address?street={street}&zip={zipcode}&benchmark=Public_AR_Current&format=json"
     response_address = requests.get(address_url)
     parsed_response_address = json.loads(response_address.text)
@@ -47,9 +41,7 @@ while True:
         print("")
         break
 
-
 while True:
-    
     how_hard = input("On a scale of 1-5, a '1' would be something like a stroll in the park and a '5' is probably better left to more experienced hikers and backpackers. What difficulty level are you interested in?: ").lower()
     while how_hard not in str([1, 2, 3, 4, 5]):
         print("Can you pick something between 1 - 5?")
@@ -61,6 +53,7 @@ while True:
 
  
     distance = input("Just how many miles would you be willing to travel to find the best route? ").lower()
+######## Need to error proof a string
     if float(distance) >= 201:
         print("Sorry, I can only look 200 miles in any direction.  I'll go ahead and look 200 miles out for you though!")
         distance = 200
@@ -68,7 +61,6 @@ while True:
     print("Okay, just a sec while I try to find something awesome for you.")
     print("--------------------")
     print("")
-
 
     matched_address = parsed_response_address['result']['addressMatches'][0]['matchedAddress']
     coordinates = parsed_response_address['result']['addressMatches'][0]['coordinates']
@@ -80,7 +72,6 @@ while True:
     response_hike = requests.get(hike_url)
     parsed_response_hike = json.loads(response_hike.text)
     
-
     while (parsed_response_hike)['success'] == int(1):
         break
     else:
@@ -102,7 +93,6 @@ while True:
     blue_list = []
     blueBlack_list = []
     black_list = []
-
 
     for x in hike_list:
         if str(x["difficulty"]) == "green":
@@ -134,7 +124,6 @@ while True:
             blueBlack_trails.append(x)
         else:
             black_trails.append(x)
-
 
     if how_hard == str(1):
         selected_trails = green_trails
@@ -205,6 +194,7 @@ while True:
                             elif final_choice == "web":
                                 webbrowser.open_new(selected_hike_url_response)
                                 print("Cool, check your browser!")
+                                print("")
                             elif final_choice == "email":
                                 print("Make an email...............")
                             elif final_choice == "csv":
@@ -224,7 +214,8 @@ while True:
                                 print("")
                                 print(f"I've saved your list to a .csv file and you can find it at {csv_file_path}.csv")
                                 print("")
-    
+                            elif final_choice == "exit":
+                                exit()
     else:
         print("")
         print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
