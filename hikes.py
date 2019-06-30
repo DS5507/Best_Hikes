@@ -26,14 +26,14 @@ while True:
     street = street_raw.replace(" ", "+")
     zipcode = input("How about your zip code? (Ex: 10013): ").lower()
     print("Let me check my map and compass and see if I can find you...")
-    print("--------------------")
+    print("")
 
     address_url = f"https://geocoding.geo.census.gov/geocoder/locations/address?street={street}&zip={zipcode}&benchmark=Public_AR_Current&format=json"
     response_address = requests.get(address_url)
     parsed_response_address = json.loads(response_address.text)
     
     while parsed_response_address['result']['addressMatches'] == []:
-        print("There's a little problem... we couldn't find your address.  Why don't you try again?  Pro Tip:  We just need your street address and your zip code, not the city or state.")
+        print("There's a little problem... I couldn't find your address.  Why don't you try again?  Pro Tip:  I just need your street address and your zip code, not the city or state.")
         print("--------------------")
         break
     else:
@@ -156,7 +156,7 @@ while True:
             selected_hike_difficulty = selected_trails[t]["difficulty"]
 
             print("")
-            print(f"We found a great hike for you! You should check out: '{selected_hike_name}'.")
+            print(f"I found a great hike for you! You should check out: '{selected_hike_name}'.")
             print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
             print(f"The community has given this trail {selected_hike_rating} out of 5 stars.")
             print("")
@@ -190,6 +190,7 @@ while True:
                         while True:
                             final_choice = input("So go ahead and please choose: 'Web,' 'Email,' 'CSV,' 'Exit': ").lower()
                             if final_choice not in ["web", "email", "csv", "exit"]:
+                                print("")
                                 print("Please choose: 'Web,' 'Email,' 'CSV,' 'Exit'") 
                             elif final_choice == "web":
                                 webbrowser.open_new(selected_hike_url_response)
