@@ -5,11 +5,12 @@ import json
 import os
 import webbrowser
 
-
 from dotenv import load_dotenv
 from urllib.request import urlopen
 import requests
 import datetime
+import sendgrid
+from sendgrid.helpers.mail import * # source of Email, Content, Mail, etc.
 
 load_dotenv()
 
@@ -21,7 +22,7 @@ print("Hey, I'm stoked that you want to go hiking.  Let's find you the best rout
 print("--------------------")
 
 while True:
-    print("We'll need your basecamp location to find your best route.")
+    print("I'll need your basecamp location to find your best route.")
     street_raw = input("What's your street address? (Ex: 123 Main St): ").lower()
     street = street_raw.replace(" ", "+")
     zipcode = input("How about your zip code? (Ex: 10013): ").lower()
@@ -113,6 +114,8 @@ while True:
     black_trails = []
     selected_trails = []
 
+## Refactor to 1 for loop?
+
     for x in hike_list:
         if str(x["id"]) in str(green_list):
             green_trails.append(x)
@@ -179,6 +182,7 @@ while True:
                             print("FYI, you cycled through your whole list.  I'll start at the beginning again.")
                             break
                     elif morenew == "more":
+                        print("-------------------")
                         print("")
                         print("")
                         print("Awesome, I'm really excited that you found a hike you like!  I've got a couple of options you can choose from now:")
@@ -197,7 +201,33 @@ while True:
                                 print("Cool, check your browser!")
                                 print("")
                             elif final_choice == "email":
-                                print("Make an email...............")
+                                to_email = input("What email should I send your selected hike to?: ")
+                                SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "Oh no!  Please get a sendgrid API key and then put it into the .env file in this directory as 'SENDGRID_API_KEY'")
+                                MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "Go in the .env file in this directory and assign an email address to 'MY_EMAIL_ADDRESS'")
+
+                                # AUTHENTICATE
+
+                                sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_API_KEY)
+
+                                # COMPILE REQUEST PARAMETERS (PREPARE THE EMAIL) 
+                                from_email = Email(MY_EMAIL_ADDRESS)
+                                to_email = Email(to_email)
+                                subject = "Your Next Great Hiking Adventure"
+
+##Collapse output to a single variable
+
+                                #message_text = f"I found a great hike for you! You should check out: '{selected_hike_name}'.\n\n The route is {selected_hike_length} miles long and is located in {selected_hike_location}.\n\n The community has given this trail {selected_hike_rating} out of 5 stars.\n\n\n\n Here's a summary of the trail: {selected_hike_summary}\n\n\n\n Check out more about this route here: {selected_hike_url_response}"
+                                message_text = "test"
+                                content = Content("text/plain", message_text)
+                                mail = Mail(from_email, subject, to_email, content)
+
+                                # ISSUE REQUEST (SEND EMAIL)
+
+                                response = sg.client.mail.send.post(request_body=mail.get())
+                                print("Email sent.  Thanks!")
+                                print("")
+
+                                ###########
                             elif final_choice == "csv":
                                 csv_file_path = os.path.join(os.path.dirname(__file__), "saved_hikes", f"Difficulty_{how_hard}_Within_{distance}_Miles")
 
@@ -211,15 +241,13 @@ while True:
                                             "Hike Name": (x['name']),
                                             "Rating": (x['stars']),
                                             "Reference URL": (x['url']),
-                                })
+                                        })
                                 print("")
                                 print(f"I've saved your list to a .csv file and you can find it at {csv_file_path}.csv")
                                 print("")
                             elif final_choice == "exit":
                                 exit()
-    else:
-        print("")
-        print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
-        print("")
-        break
-
+else:
+    print("")
+    print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
+    print("")
