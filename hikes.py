@@ -6,7 +6,6 @@ import os
 import webbrowser
 
 from dotenv import load_dotenv
-from urllib.request import urlopen
 import requests
 import datetime
 import sendgrid
@@ -19,13 +18,13 @@ hike_key = os.environ.get("hike_key")
 print("")
 print("")
 print("Hey, I'm stoked that you want to go hiking.  Let's find you the best route!")
-print("--------------------")
+print("")
 
 while True:
     print("I'll need your basecamp location to find your best route.")
-    street_raw = input("What's your street address? (Ex: 123 Main St): ").lower()
+    street_raw = input("What's your street address? (Ex: 40 W 4th St): ").lower()
     street = street_raw.replace(" ", "+")
-    zipcode = input("How about your zip code? (Ex: 10013): ").lower()
+    zipcode = input("How about your zip code? (Ex: 10012): ").lower()
     print("Let me check my map and compass and see if I can find you...")
     print("")
 
@@ -35,7 +34,7 @@ while True:
     
     while parsed_response_address['result']['addressMatches'] == []:
         print("There's a little problem... I couldn't find your address.  Why don't you try again?  Pro Tip:  I just need your street address and your zip code, not the city or state.")
-        print("--------------------")
+        print("")
         break
     else:
         print(f"Great, I found your starting point!  I'll start my search from: {parsed_response_address['result']['addressMatches'][0]['matchedAddress']}")  
@@ -46,7 +45,7 @@ while True:
     how_hard = input("On a scale of 1-5, a '1' would be something like a stroll in the park and a '5' is probably better left to more experienced hikers and backpackers. What difficulty level are you interested in?: ").lower()
     while how_hard not in str([1, 2, 3, 4, 5]):
         print("Can you pick something between 1 - 5?")
-        print("--------------------")
+        print("")
         how_hard = input("On a scale of 1-5, what difficulty level are you interested in?:  ").lower()
     else:
         print(f"Okay, I'll look for something with a difficulty rating of {how_hard} out of 5")
@@ -247,7 +246,7 @@ while True:
                                 print("")
                             elif final_choice == "exit":
                                 exit()
-else:
-    print("")
-    print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
-    print("")
+    else:
+        print("")
+        print("Welp, we hit a snag. I couldn't find anything that matched the difficulty and search radius that you provided.  You should try again, but maybe try selecting a different difficulty level or increasing your search radius.  Thanks!")
+        print("")
