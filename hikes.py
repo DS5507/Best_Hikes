@@ -216,8 +216,8 @@ while True:
 
 ##Collapse output to a single variable
 
-                                #message_text = f"I found a great hike for you! You should check out: '{selected_hike_name}'.\n\n The route is {selected_hike_length} miles long and is located in {selected_hike_location}.\n\n The community has given this trail {selected_hike_rating} out of 5 stars.\n\n\n\n Here's a summary of the trail: {selected_hike_summary}\n\n\n\n Check out more about this route here: {selected_hike_url_response}"
-                                message_text = "test"
+                                message_text = f"I found a great hike for you! You should check out: '{selected_hike_name}'.\n\n The route is {selected_hike_length} miles long and is located in {selected_hike_location}.\n\n The community has given this trail {selected_hike_rating} out of 5 stars.\n\n Here's a summary of the trail: {selected_hike_summary}\n\n Check out more about this route here: {selected_hike_url_response}"
+
                                 content = Content("text/plain", message_text)
                                 mail = Mail(from_email, subject, to_email, content)
 
