@@ -93,24 +93,6 @@ while True:
     hike_url_response = (parsed_response_hike)['trails'][0]['url']
     hike_id = (parsed_response_hike)['trails'][0]["id"]
 
-    green_list = []
-    greenBlue_list=[]
-    blue_list = []
-    blueBlack_list = []
-    black_list = []
-
-    for x in hike_list:  ##  supriyajha5 helped me with the initial list comprehension needs.
-        if str(x["difficulty"]) == "green":
-            blueBlack_list.append(x["id"]) 
-        elif str(x["difficulty"]) == "greenBlue":
-            greenBlue_list.append(x["id"]) 
-        elif str(x["difficulty"]) == "blue":
-            blue_list.append(x["id"]) 
-        elif str(x["difficulty"]) == "blueBlack":
-            blueBlack_list.append(x["id"]) 
-        else:
-            black_list.append(x["id"]) 
-
     green_trails = []
     greenBlue_trails=[]
     blue_trails = []
@@ -118,19 +100,17 @@ while True:
     black_trails = []
     selected_trails = []
 
-## Refactor to 1 for loop?
-
-    for x in hike_list:
-        if str(x["id"]) in str(green_list):
+    for x in hike_list:  ##  supriyajha5 helped me with the initial list comprehension needs.
+        if str(x["difficulty"]) == "green":
             green_trails.append(x)
-        elif str(x["id"]) in str(greenBlue_list):
+        elif str(x["difficulty"]) == "greenBlue":
             greenBlue_trails.append(x)
-        elif str(x["id"]) in str(blue_list):
+        elif str(x["difficulty"]) == "blue":
             blue_trails.append(x)
-        elif str(x["id"]) in str(blueBlack_list):
-            blueBlack_trails.append(x)
+        elif str(x["difficulty"]) == "blueBlack":
+            blueBlack_trails.append(x) 
         else:
-            black_trails.append(x)
+            black_trails.append(x) 
 
     if how_hard == str(1):
         selected_trails = green_trails
