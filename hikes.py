@@ -185,15 +185,12 @@ while True:
                                 to_email = Email(to_email)
                                 subject = "Your Next Great Hiking Adventure"
 
-##Collapse output to a single variable
-
                                 message_text = f"{selected_output(selected_trails)}\n\nCheck out more about this route here: {selected_hike_url_response}"
 
                                 content = Content("text/plain", message_text)
                                 mail = Mail(from_email, subject, to_email, content)
 
                                 # ISSUE REQUEST (SEND EMAIL)
-
                                 response = sg.client.mail.send.post(request_body=mail.get())
                                 print("")
                                 print("Great, I sent off all the info!")
