@@ -83,16 +83,6 @@ while True:
         print("Welp, we hit a snag. I couldn't get a valid response back from the Hiking Project.  Let's try again.")      
         break
 
-    hike_list = (parsed_response_hike)['trails']
-    hike_name = (parsed_response_hike)['trails'][0]['name']
-    hike_summary = (parsed_response_hike)['trails'][0]['summary']
-    hike_length = (parsed_response_hike)['trails'][0]['length']
-    hike_rating = (parsed_response_hike)['trails'][0]['stars']
-    hike_difficulty_raw = (parsed_response_hike)['trails'][0]['difficulty']
-    hike_location = (parsed_response_hike)['trails'][0]['location']
-    hike_url_response = (parsed_response_hike)['trails'][0]['url']
-    hike_id = (parsed_response_hike)['trails'][0]["id"]
-
     green_trails = []
     greenBlue_trails=[]
     blue_trails = []
@@ -136,11 +126,8 @@ while True:
             selected_hike_summary = selected_trails[t]['summary']
             selected_hike_length = selected_trails[t]['length']
             selected_hike_rating = selected_trails[t]['stars']
-            selected_hike_difficulty_raw = selected_trails[t]['difficulty']
             selected_hike_location = selected_trails[t]['location']
             selected_hike_url_response = selected_trails[t]['url']
-            selected_hike_id = selected_trails[t]["id"]
-            selected_hike_difficulty = selected_trails[t]["difficulty"]
 
             print("")
             def selected_output(selected_trails):
