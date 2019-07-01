@@ -163,13 +163,12 @@ while True:
             selected_hike_difficulty = selected_trails[t]["difficulty"]
 
             print("")
-            print(f"I found a great hike for you! You should check out: '{selected_hike_name}'.")
-            print(f"The route is {selected_hike_length} miles long and is located in {selected_hike_location}.")
-            print(f"The community has given this trail {selected_hike_rating} out of 5 stars.")
+            def selected_output(selected_trails):
+                return(f"I found a great hike for you! You should check out: '{selected_hike_name}'.\n\nThe route is {selected_hike_length} miles long and is located in {selected_hike_location}.\n\nThe community has given this trail {selected_hike_rating} out of 5 stars.\n\nHere's a summary of the trail: {selected_hike_summary}")
+
+            print(selected_output(selected_trails))
             print("")
-            print(f"Here's a summary of the trail: {selected_hike_summary}")
-            print("")
-           
+
             while True:
                 morenew = input(f"Select 'More' for additional options or 'Next' to see the next hike that met your criteria.: ").lower()
                 if morenew not in ["more", "next"]:
@@ -221,7 +220,7 @@ while True:
 
 ##Collapse output to a single variable
 
-                                message_text = f"I found a great hike for you! You should check out: '{selected_hike_name}'.\n\n The route is {selected_hike_length} miles long and is located in {selected_hike_location}.\n\n The community has given this trail {selected_hike_rating} out of 5 stars.\n\n Here's a summary of the trail: {selected_hike_summary}\n\n Check out more about this route here: {selected_hike_url_response}"
+                                message_text = f"{selected_output(selected_trails)}\n\nCheck out more about this route here: {selected_hike_url_response}"
 
                                 content = Content("text/plain", message_text)
                                 mail = Mail(from_email, subject, to_email, content)
