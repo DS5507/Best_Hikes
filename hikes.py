@@ -28,7 +28,7 @@ while True:
     print("Let me check my map and compass and see if I can find you...")
     print("")
 
-    address_url = f"https://geocoding.geo.census.gov/geocoder/locations/address?street={street}&zip={zipcode}&benchmark=Public_AR_Current&format=json"
+    address_url = f"https://geocoding.geo.census.gov/geocoder/locations/address?street={street}&zip={zipcode}&benchmark=Public_AR_Current&format=json"  ## Adapted from Robo Advisor Project
     response_address = requests.get(address_url)
     parsed_response_address = json.loads(response_address.text)
     
@@ -44,7 +44,7 @@ while True:
 while True:
     how_hard = input("On a scale of 1-5, a '1' would be something like a stroll in the park and a '5' is probably better left to more experienced hikers and backpackers. What difficulty level are you interested in?: ").lower()
     while how_hard not in str([1, 2, 3, 4, 5]):
-        print("Can you pick something between 1 - 5?")
+        print("Can you pick a whole number between 1 - 5?")
         print("")
         how_hard = input("On a scale of 1-5, what difficulty level are you interested in?:  ").lower()
     else:
@@ -53,8 +53,13 @@ while True:
 
  
     distance = input("Just how many miles would you be willing to travel to find the best route? ").lower()
-######## Need to error proof a string
-    if float(distance) >= 201:
+    while (distance.isdigit()) == False:  ## Adapted from https://pynative.com/python-check-user-input-is-number-or-string/
+        print("Sorry, I really need a whole number between 1 and 200")
+        print("")
+        distance = input("Just how many miles would you be willing to travel to find the best route? ").lower()
+    else:
+        distance = int(distance)
+    if distance >= 201:
         print("Sorry, I can only look 200 miles in any direction.  I'll go ahead and look 200 miles out for you though!")
         distance = 200
 
@@ -68,7 +73,7 @@ while True:
     lon = parsed_response_address['result']['addressMatches'][0]['coordinates']['x']
 
     ## Lat/Lon to Route
-    hike_url = f"https://www.hikingproject.com/data/get-trails?lat={lat}&lon={lon}&minStars=3&sort=quality&maxDistance={distance}&maxResults=500&key={hike_key}"
+    hike_url = f"https://www.hikingproject.com/data/get-trails?lat={lat}&lon={lon}&minStars=3&sort=quality&maxDistance={distance}&maxResults=500&key={hike_key}"  ## Adapted from Robo Advisor Project
     response_hike = requests.get(hike_url)
     parsed_response_hike = json.loads(response_hike.text)
     
@@ -94,7 +99,7 @@ while True:
     blueBlack_list = []
     black_list = []
 
-    for x in hike_list:
+    for x in hike_list:  ##  supriyajha5 helped me with the initial list comprehension needs.
         if str(x["difficulty"]) == "green":
             blueBlack_list.append(x["id"]) 
         elif str(x["difficulty"]) == "greenBlue":
@@ -195,11 +200,12 @@ while True:
                             if final_choice not in ["web", "email", "csv", "exit"]:
                                 print("")
                                 print("Please choose: 'Web,' 'Email,' 'CSV,' 'Exit'") 
-                            elif final_choice == "web":
+                            elif final_choice == "web":  ## Adapted from https://www.csestack.org/code-python-to-open-url-in-browser/
                                 webbrowser.open_new(selected_hike_url_response)
+                                print("")
                                 print("Cool, check your browser!")
                                 print("")
-                            elif final_choice == "email":
+                            elif final_choice == "email":  ## Adapted from Shopping Cart Exercise
                                 to_email = input("What email should I send your selected hike to?: ")
                                 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "Oh no!  Please get a sendgrid API key and then put it into the .env file in this directory as 'SENDGRID_API_KEY'")
                                 MY_EMAIL_ADDRESS = os.environ.get("MY_EMAIL_ADDRESS", "Go in the .env file in this directory and assign an email address to 'MY_EMAIL_ADDRESS'")
@@ -223,11 +229,11 @@ while True:
                                 # ISSUE REQUEST (SEND EMAIL)
 
                                 response = sg.client.mail.send.post(request_body=mail.get())
-                                print("Email sent.  Thanks!")
+                                print("")
+                                print("Great, I sent off all the info!")
                                 print("")
 
-                                ###########
-                            elif final_choice == "csv":
+                            elif final_choice == "csv":  ## Adapted from Robo Advisor Exercise
                                 csv_file_path = os.path.join(os.path.dirname(__file__), "saved_hikes", f"Difficulty_{how_hard}_Within_{distance}_Miles")
 
                                 csv_headers = ["Hike Name", "Rating", "Reference URL"]
