@@ -90,6 +90,7 @@ while True:
     black_trails = []
     selected_trails = []
 
+    hike_list = (parsed_response_hike)['trails']
     for x in hike_list:  ##  supriyajha5 helped me with the initial list comprehension needs.
         if str(x["difficulty"]) == "green":
             green_trails.append(x)
@@ -144,7 +145,7 @@ while True:
                 else:    
                     if morenew == "next":
                         print("-------------------")
-                        if t <= len(selected_trails):
+                        if t < len(selected_trails)-1:
                             t = t+1
                             break
                         else:
