@@ -15,8 +15,17 @@ Create a copy of ".env.example" and rename it ".env".
 Sendgrid:
 Sign up for a free [Sengrid account](https://signup.sendgrid.com/), verify your account, and then create an API Key with "full access" permissions.  Set the environment variables in the .env file to reflect your API key and the email associated with your account.
 
+```
+SENDGRID_API_KEY="demo" # use your own API Key!
+MY_EMAIL_ADDRESS="Address@Email.Com" # use the email address you associated with the SendGrid service
+```
+
 The Hiking Project:
 Sign up for a free [Hiking Project account](https://www.hikingproject.com/data) and retrieve your API key.  Set the environment variable in the .env file to reflect your API key.
+
+```
+hike_key = "demo" # use your own API Key
+```
 
 
 ## Create Virtual Environment
