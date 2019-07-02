@@ -3,7 +3,7 @@
 [Project Description](https://github.com/prof-rossetti/nyu-info-2335-201905/tree/master/projects/freestyle)
 
 ## Installation
-Clone or download from [GitHub source](https://github.com/DS5507/Best_Hikes), then navigate into the project repo.
+Clone or download from [GitHub source](https://github.com/DS5507/Best_Hikes), then navigate into the project repository from the command line.
 
 ```sh
 cd ~\Best_Hikes
@@ -20,18 +20,20 @@ Sign up for a free [Hiking Project account](https://www.hikingproject.com/data) 
 
 
 ## Create Virtual Environment
+Create a virtual environment from the command line.
 ```sh
 conda create -n hike-env #first time only
 conda activate hike-env
 ```
 
 ## Install Requirements
+Install the requirements list from the command line.
 ```sh
 pip install -r requirements.txt
 ```
 
 ## Usage
-Run the program:
+Run the program using the command line.
 ```sh
 python hikes.py
 ```
